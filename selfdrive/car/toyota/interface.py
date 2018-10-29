@@ -154,7 +154,7 @@ class CarInterface(object):
       ret.steerKpV, ret.steerKiV = [[0.6], [0.05]]
       ret.steerKf = 0.00006
 
-  elif candidate == CAR.COROLLA_2015:
+    elif candidate == CAR.COROLLA_2015:
       stop_and_go = False
       ret.safetyParam = 100 # see conversion factor for STEER_TORQUE_EPS in dbc file
       ret.wheelbase = 2.70
