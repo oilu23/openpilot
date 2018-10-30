@@ -145,7 +145,7 @@ class CarState(object):
     self.angle_steers_rate = cp.vl["STEER_ANGLE_SENSOR"]['STEER_RATE']
     can_gear = int(cp.vl["GEAR_PACKET"]['GEAR'])
     self.gear_shifter = parse_gear_shifter(can_gear, self.shifter_values)
-    if CP.carFingerprint in [CAR.LEXUS_GS300H, CAR.COROLLA_2015]:
+    if self.CP.carFingerprint in [CAR.LEXUS_GS300H, CAR.COROLLA_2015]:
       self.main_on = cp.vl["PCM_CRUISE_3"]['MAIN_ON']
     else:
       self.main_on = cp.vl["PCM_CRUISE_2"]['MAIN_ON']
@@ -163,7 +163,7 @@ class CarState(object):
     self.steer_override = abs(self.steer_torque_driver) > STEER_THRESHOLD
 
     self.user_brake = 0
-    if CP.carFingerprint in [CAR.LEXUS_GS300H, CAR.COROLLA_2015]:
+    if self.CP.carFingerprint in [CAR.LEXUS_GS300H, CAR.COROLLA_2015]:
         self.pcm_acc_status = cp.vl["PCM_CRUISE"]['ACC_ACTIVE']
         self.v_cruise_pcm = cp.vl["PCM_CRUISE_3"]['SET_SPEED']
         self.low_speed_lockout = 0
