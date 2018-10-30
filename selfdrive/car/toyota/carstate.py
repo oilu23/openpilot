@@ -65,7 +65,7 @@ def get_can_parser(CP):
   #breaks Lexus GS300h
   if CP.carFingerprint in [CAR.LEXUS_GS300H, CAR.COROLLA_2015]:
     signals += [
-      ("CRUISE_STATE", "PCM_CRUISE_3", 0)
+      ("CRUISE_STATE", "PCM_CRUISE_3", 0),
       ("MAIN_ON", "PCM_CRUISE_3", 0),
       ("SET_SPEED", "PCM_CRUISE_3", 0),
     ]
