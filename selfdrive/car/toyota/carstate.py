@@ -145,7 +145,7 @@ class CarState(object):
     self.angle_steers_rate = cp.vl["STEER_ANGLE_SENSOR"]['STEER_RATE']
     can_gear = int(cp.vl["GEAR_PACKET"]['GEAR'])
     self.gear_shifter = parse_gear_shifter(can_gear, self.shifter_values)
-    if self.CP.carFingerprint in == CAR.COROLLA_2015:
+    if self.CP.carFingerprint == CAR.COROLLA_2015:
       self.main_on = cp.vl["PCM_CRUISE_3"]['MAIN_ON']
     else:
       self.main_on = cp.vl["PCM_CRUISE_2"]['MAIN_ON']
