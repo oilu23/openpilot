@@ -53,7 +53,7 @@ def get_can_parser(CP):
     ("PCM_CRUISE", 33),
     ("STEER_TORQUE_SENSOR", 50),
     #("EPS_STATUS", 25),
-    # do not check EPS status (for teasting only)
+    # do not check EPS status (for testing only)
   ]
 
   if CP.carFingerprint == CAR.PRIUS:
@@ -117,6 +117,7 @@ class CarState(object):
                                     cp.vl["SEATS_DOORS"]['DOOR_OPEN_RL'], cp.vl["SEATS_DOORS"]['DOOR_OPEN_RR']])
     self.seatbelt = not cp.vl["SEATS_DOORS"]['SEATBELT_DRIVER_UNLATCHED']
 
+    # TODO: Ensure correct - doesn't graph properly in Cabana
     self.brake_pressed = cp.vl["BRAKE_MODULE"]['BRAKE_PRESSED']
     if self.CP.enableGasInterceptor:
       self.pedal_gas = cp.vl["GAS_SENSOR"]['INTERCEPTOR_GAS']
@@ -169,13 +170,15 @@ class CarState(object):
         self.pcm_acc_status = cp.vl["PCM_CRUISE_3"]['CRUISE_STATE']
         self.v_cruise_pcm = cp.vl["PCM_CRUISE_3"]['SET_SPEED']
         self.low_speed_lockout = 0
+        self.gas_pressed = not cp.vl["GAS_PEDAL"]['GAS_RELEASED']
     else:
         self.pcm_acc_status = cp.vl["PCM_CRUISE"]['CRUISE_STATE']
         self.v_cruise_pcm = cp.vl["PCM_CRUISE_2"]['SET_SPEED']
         self.low_speed_lockout = cp.vl["PCM_CRUISE_2"]['LOW_SPEED_LOCKOUT'] == 2
-    self.gas_pressed = not cp.vl["PCM_CRUISE"]['GAS_RELEASED']
+        self.gas_pressed = not cp.vl["PCM_CRUISE"]['GAS_RELEASED']
     self.brake_lights = bool(cp.vl["ESP_CONTROL"]['BRAKE_LIGHTS_ACC'] or self.brake_pressed)
     if self.CP.carFingerprint == CAR.PRIUS:
       self.generic_toggle = cp.vl["AUTOPARK_STATUS"]['STATE'] != 0
     else:
+      # TODO: Consider setting this to one of the other various signals in LIGHT_STALK
       self.generic_toggle = bool(cp.vl["LIGHT_STALK"]['AUTO_HIGH_BEAM'])
