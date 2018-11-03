@@ -35,7 +35,6 @@ def get_can_parser(CP):
     ("STEER_FRACTION", "STEER_ANGLE_SENSOR", 0),
     ("STEER_RATE", "STEER_ANGLE_SENSOR", 0),
     ("ACC_ACTIVE", "PCM_CRUISE", 0),
-    ("GAS_RELEASED", "PCM_CRUISE", 0),
     ("STEER_TORQUE_DRIVER", "STEER_TORQUE_SENSOR", 0),
     ("STEER_TORQUE_EPS", "STEER_TORQUE_SENSOR", 0),
     ("TURN_SIGNALS", "STEERING_LEVERS", 3),   # 3 is no blinkers
@@ -66,6 +65,7 @@ def get_can_parser(CP):
   #breaks Lexus GS300h
   if CP.carFingerprint == CAR.COROLLA_2015:
     signals += [
+      ("GAS_RELEASED", "GAS_PEDAL", 0),
       ("CRUISE_STATE", "PCM_CRUISE_3", 0),
       ("MAIN_ON", "PCM_CRUISE_3", 0),
       ("SET_SPEED", "PCM_CRUISE_3", 0),
@@ -73,6 +73,7 @@ def get_can_parser(CP):
     checks += [("PCM_CRUISE_3", 1)]
   else:
     signals += [
+      ("GAS_RELEASED", "PCM_CRUISE", 0),
       ("CRUISE_STATE", "PCM_CRUISE", 0),
       ("MAIN_ON", "PCM_CRUISE_2", 0),
       ("SET_SPEED", "PCM_CRUISE_2", 0),
