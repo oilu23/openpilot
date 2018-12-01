@@ -73,10 +73,20 @@ def get_can_parser(CP):
 
 def get_cam_can_parser(CP):
 
-  signals = []
+  signals = [ 
+  ("STEER_TORQUE_CMD", "STEERING_LKA", 0),
+  ("STEER_REQUEST", "STEERING_LKA", 0),
+  ("LKA_STATE", "STEERING_LKA", 0),
+  ("LDA_ALERT", "LKAS_HUD", 0),
+  ("TWO_BEEPS", "LKAS_HUD", 0),
+  ("REPEATED_BEEPS", "LKAS_HUD", 0),
+  ]
 
   # use steering message to check if panda is connected to frc
-  checks = [("STEERING_LKA", 42)]
+  checks = [
+  ("STEERING_LKA", 42),
+  #("LKAS_HUD", 100),
+  ]
 
   return CANParser(DBC[CP.carFingerprint]['pt'], signals, checks, 2)
 
@@ -109,6 +119,15 @@ class CarState(object):
     self.cam_can_valid = cp_cam.can_valid
 
     # update prevs, update must run once per loop
+
+    #LKA restore
+    self.stock_steer_request = cp_cam.vl["STEERING_LKA"]['STEER_REQUEST']
+    self.stock_torque_req = cp_cam.vl["STEERING_LKA"]['STEER_TORQUE_CMD']
+    self.stock_lka_state = cp_cam.vl["STEERING_LKA"]['LKA_STATE']
+    self.stock_lda_alert = cp_cam.vl["LKAS_HUD"]['LDA_ALERT']
+    self.stock_two_beeps = cp_cam.vl["LKAS_HUD"]['LDA_ALERT']
+    self.stock_repeated_beeps = cp_cam.vl["LKAS_HUD"]['REPEATED_BEEPS']
+    
     self.prev_left_blinker_on = self.left_blinker_on
     self.prev_right_blinker_on = self.right_blinker_on
 
