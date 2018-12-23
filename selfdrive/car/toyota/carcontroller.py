@@ -161,7 +161,10 @@ class CarController(object):
       self.last_fault_frame = frame
 
     # Cut steering for 2s after fault
-    if not enabled or (frame - self.last_fault_frame < 200):
+    if (frame - self.last_fault_frame < 200):
+        apply_steer = 0
+        apply_steer_req = 0
+    elif not enabled:
       apply_steer = CS.stock_torque_req
       apply_steer_req = CS.stock_steer_request
     else:
@@ -254,7 +257,7 @@ class CarController(object):
 
     if (frame % 100 == 0 or send_ui) and ECU.CAM in self.fake_ecus:
       can_sends.append(create_ui_command(self.packer, steer, sound1, sound2))
-    
+
     #send UI commands if requested by camera
     if CS.stock_steer_request and not (CS.pcm_acc_active or send_ui):
       can_sends.append(create_ui_command(self.packer, CS.stock_lda_alert, CS.stock_repeated_beeps, CS.stock_two_beeps))

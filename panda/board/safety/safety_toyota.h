@@ -63,6 +63,17 @@ static void toyota_rx_hook(CAN_FIFOMailBox_TypeDef *to_push) {
   // msgs are only on bus 2 if panda is connected to frc
   if (bus == 2) {
     toyota_camera_forwarded = 1;
+    // allow controls if LKAS is requested by stock system
+    if ((to_push->RIR>>21) == 0x2e4) {
+      // 1st bit is steer_request
+      int steer_request = to_push->RDLR;
+      if (steer_request && !steer_request_last) {
+        controls_allowed = 1;
+      } else if (!steer_request) {
+        controls_allowed = 0;
+      }
+      steer_request_last = steer_request;
+    }
   }
 
   // 0x2E4 is lkas cmd. If it is on bus 0, then giraffe switch 1 is high
