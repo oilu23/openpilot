@@ -28,6 +28,7 @@ int toyota_desired_torque_last = 0;       // last desired steer torque
 int toyota_rt_torque_last = 0;            // last desired torque for real time check
 uint32_t toyota_ts_last = 0;
 int toyota_cruise_engaged_last = 0;       // cruise state
+int steer_request_last = 0;               // steer request from LKA camera
 struct sample_t toyota_torque_meas;       // last 3 motor torques produced by the eps
 
 
