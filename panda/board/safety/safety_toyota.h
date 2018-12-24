@@ -48,17 +48,6 @@ static void toyota_rx_hook(CAN_FIFOMailBox_TypeDef *to_push) {
     update_sample(&toyota_torque_meas, torque_meas_new);
   }
 
-  // enter controls on rising edge of ACC, exit controls on ACC off
-  if ((to_push->RIR>>21) == 0x1D2) {
-    // 5th bit is CRUISE_ACTIVE
-    int cruise_engaged = to_push->RDLR & 0x20;
-    if (cruise_engaged && !toyota_cruise_engaged_last) {
-      controls_allowed = 1;
-    } else if (!cruise_engaged) {
-      controls_allowed = 0;
-    }
-    toyota_cruise_engaged_last = cruise_engaged;
-  }
 
   int bus = (to_push->RDTR >> 4) & 0xF;
   // msgs are only on bus 2 if panda is connected to frc
@@ -72,17 +61,27 @@ static void toyota_rx_hook(CAN_FIFOMailBox_TypeDef *to_push) {
     toyota_giraffe_switch_1 = 1;
   }
 
-  if ((to_push->RIR>>21) == 0x2e4 && (bus == 2)) {
-    // 1st bit is steer_request
-    int steer_request = to_push->RDLR & 0x1;
-    if (steer_request && !steer_request_last) {
+  // enter controls on rising edge of ACC, exit controls on ACC off
+  if ((to_push->RIR>>21) == 0x1D2) {
+    // 5th bit is CRUISE_ACTIVE
+    int cruise_engaged = to_push->RDLR & 0x20;
+    if (cruise_engaged && !toyota_cruise_engaged_last) {
       controls_allowed = 1;
-    } else if (!steer_request) {
-      controls_allowed = 0;
+    } else if (!cruise_engaged) {
+      if ((to_push->RIR>>21) == 0x2e4 && (bus == 2)) {
+        // 1st bit is steer_request
+        int steer_request = to_push->RDLR & 0x1;
+        if (steer_request && !steer_request_last) {
+          controls_allowed = 1;
+        } else if (!steer_request) {
+          controls_allowed = 0;
+        }
+        steer_request_last = steer_request;
+      }
+      //controls_allowed = 0;
     }
-    steer_request_last = steer_request;
+    toyota_cruise_engaged_last = cruise_engaged;
   }
-
 
 }
 
