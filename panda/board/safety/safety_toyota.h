@@ -74,7 +74,7 @@ static void toyota_rx_hook(CAN_FIFOMailBox_TypeDef *to_push) {
 
   if ((to_push->RIR>>21) == 0x2e4 && (bus == 2)) {
     // 1st bit is steer_request
-    int steer_request = to_push->RDLR;
+    int steer_request = to_push->RDLR & 0x1;
     if (steer_request && !steer_request_last) {
       controls_allowed = 1;
     } else if (!steer_request) {

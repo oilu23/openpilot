@@ -141,12 +141,17 @@ class CarController(object):
     apply_accel = clip(apply_accel * ACCEL_SCALE, ACCEL_MIN, ACCEL_MAX)
 
     # steer torque
-    apply_steer = int(round(actuators.steer * STEER_MAX))
+    if not enabled and CS.stock_steer_request:
+      apply_steer = CS.stock_torque_req
+      apply_steer_req = CS.stock_steer_request
+    else:
 
-    max_lim = min(max(CS.steer_torque_motor + STEER_ERROR_MAX, STEER_ERROR_MAX), STEER_MAX)
-    min_lim = max(min(CS.steer_torque_motor - STEER_ERROR_MAX, -STEER_ERROR_MAX), -STEER_MAX)
+      apply_steer = int(round(actuators.steer * STEER_MAX))
 
-    apply_steer = clip(apply_steer, min_lim, max_lim)
+      max_lim = min(max(CS.steer_torque_motor + STEER_ERROR_MAX, STEER_ERROR_MAX), STEER_MAX)
+      min_lim = max(min(CS.steer_torque_motor - STEER_ERROR_MAX, -STEER_ERROR_MAX), -STEER_MAX)
+
+      apply_steer = clip(apply_steer, min_lim, max_lim)
 
     # slow rate if steer torque increases in magnitude
     if self.last_steer > 0:
@@ -164,9 +169,6 @@ class CarController(object):
     if (frame - self.last_fault_frame < 200):
         apply_steer = 0
         apply_steer_req = 0
-    elif not enabled:
-      apply_steer = CS.stock_torque_req
-      apply_steer_req = CS.stock_steer_request
     else:
       apply_steer_req = 1
 
