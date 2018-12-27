@@ -106,7 +106,7 @@ class CarInterface(object):
       tire_stiffness_factor = 0.444
       ret.mass = 2860 * CV.LB_TO_KG + std_cargo  # mean between normal and hybrid
       ret.steerKpV, ret.steerKiV = [[0.2], [0.05]]
-      ret.steerKf = 0.00003   # full torque for 20 deg at 80mph means 0.00007818594
+      ret.steerKf = 0.00003909297   # full torque for 20 deg at 80mph means 0.00007818594
 
     elif candidate == CAR.LEXUS_RXH:
       stop_and_go = True
@@ -126,7 +126,7 @@ class CarInterface(object):
       tire_stiffness_factor = 0.7933
       ret.mass = 3300. * CV.LB_TO_KG + std_cargo
       ret.steerKpV, ret.steerKiV = [[0.723], [0.0428]]
-      ret.steerKf = 0.00006
+      ret.steerKf = 0.00007818594
 
     elif candidate in [CAR.CAMRY, CAR.CAMRYH]:
       stop_and_go = True
